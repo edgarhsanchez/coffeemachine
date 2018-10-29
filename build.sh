@@ -3,6 +3,11 @@ cd UI
 
 cd ..
 
+cd Barista
+./build.sh
+
+cd ..
+
 echo "building docker image..."
 docker-compose build
 echo "tag images"
