@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"time"
 	"github.com/gin-gonic/contrib/gzip"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,8 @@ func main() {
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	router.POST("/make", makeCoffeeHandle)
+
+	router.Run(":" + os.Getenv("PORT"))
 }
 
 func makeCoffeeHandle(c *gin.Context) {
