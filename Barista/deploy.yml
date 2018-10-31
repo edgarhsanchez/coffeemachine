@@ -43,8 +43,7 @@ spec:
     spec:
       containers:
         - name: coffeemachine-barista-pod
-          image: coffeemachine_barista:v1
-          imagePullPolicy: Always
+          image: coffeemachine_barista:1.0.0
           ports: 
           - containerPort: 80
           # resources:            

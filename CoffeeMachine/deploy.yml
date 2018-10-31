@@ -43,8 +43,7 @@ spec:
     spec:
       containers:
         - name: coffeemachine-coffeemachine-pod
-          image: coffeemachine_coffeemachine:v1
-          imagePullPolicy: Always
+          image: coffeemachine_coffeemachine:1.0.0
           ports: 
           - containerPort: 80
           # resources:            

@@ -43,15 +43,7 @@ spec:
     spec:
       containers:
         - name: coffeemachine-ui-pod
-          image: coffeemachine_ui:v1
-          imagePullPolicy: Always
+          image: coffeemachine_ui:1.0.0
           ports: 
           - containerPort: 80
-          # resources:            
-          #   limits:
-          #     cpu: "1"
-          #     memory: "250Mi"
-          #   requests:
-          #     cpu: "0.5"
-          #     memory: "100Mi"
               
