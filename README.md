@@ -3,8 +3,6 @@ A mono repo dedicated to showing the power of kubernetes in a simple micro servi
 
 This application consists of three micro services, described below, which showcase common kubernetes scenarios including but not limited to pods, deployments, and services with emphasis on rolling deployments, blue green deployments, and canary deployments.  Each micro service is dedicated to a simple task as to not over complicate or detract from the primary focus of the project and repo.
 
-The production application is running in AWS EKS and is located (can be found) at <here>
-
 Microservices
 1.  Web UI.  Will show the current cups of coffee awaiting pickup, cups being created, and number of coffee machines with availability.
 2.  Coffee Machine (1).  Workhorses of the application, creating coffee, and delivering these to the application.
@@ -12,4 +10,7 @@ Microservices
 
 All folders in this repo are labeled with obvious intent.
 
+This project will grow to highlight particular aspects of microservices with kubernetes as needed to better demonstrate capabilities.  
+
 (more to come)
+
