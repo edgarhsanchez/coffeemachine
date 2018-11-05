@@ -25,6 +25,8 @@ Install chocolatey  (https://chocolatey.org/install)
 3. Setup kubernetes (k8s)
   Enter settings screen in docker.  In windows this can be done by right clicking on the docker whale on the windows status icon.  Once in the settings screen Navigate to the k8s tab and modify the settings to enable k8s.
 
+  ![Screenshot of k8s settings](https://github.com/edgarhsanchez/coffeemachine/blob/master/readmeimages/docker-setup-k8s.PNG)
+
 
 (more to come)
 
