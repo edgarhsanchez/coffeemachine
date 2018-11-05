@@ -12,5 +12,19 @@ All folders in this repo are labeled with obvious intent.
 
 This project will grow to highlight particular aspects of microservices with kubernetes as needed to better demonstrate capabilities.  
 
+## Project Setup
+
+1.  Install all required tools
+Windows--------
+Install chocolatey  (https://chocolatey.org/install)
+  choco install golang
+  choco install docker
+
+2. Install an ide or editor of choice (this author prefers Visual Studio Code)
+
+3. Setup kubernetes (k8s)
+  Enter settings screen in docker.  In windows this can be done by right clicking on the docker whale on the windows status icon.  Once in the settings screen Navigate to the k8s tab and modify the settings to enable k8s.
+
+
 (more to come)
 
