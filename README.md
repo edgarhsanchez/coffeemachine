@@ -38,7 +38,7 @@ On aws after creating a cluster you will need to run two cloudformations
 
 After running these two cloudformations you will be able to see the nodes created soon after.  As a consequence to the nodes being creating the pods defined in the 'local.deploy.sh' will also be started.
 
-These and the entire kubernetes infrastructure can be seen by using 'kubectl get --all
+These and the entire kubernetes infrastructure can be seen by using 'kubectl get all
 
 The aws-auth-cm.yaml file also contained in the project is an example for the node IAM configuration and is run last after the steps in the 'getting-started.html' from AWS is followed.
 

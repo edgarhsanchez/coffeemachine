@@ -5,7 +5,7 @@ metadata:
   labels:
     app: coffeemachine-barista
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - port: 80
     nodePort: 30002
@@ -22,7 +22,7 @@ kind: Deployment
 metadata:
   name: coffeemachine-barista-deploy
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: coffeemachine-barista
