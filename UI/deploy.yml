@@ -43,7 +43,14 @@ spec:
     spec:
       containers:
         - name: coffeemachine-ui-pod
-          image: coffeemachine_ui:1.0.0
+          image: 087812398137.dkr.ecr.us-east-1.amazonaws.com/coffeemachine/ui:1.0.0
           ports: 
           - containerPort: 80
+          # resources:            
+          #   limits:
+          #     cpu: "1"
+          #     memory: "250Mi"
+          #   requests:
+          #     cpu: "0.5"
+          #     memory: "100Mi"
               

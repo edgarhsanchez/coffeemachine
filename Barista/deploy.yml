@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
         - name: coffeemachine-barista-pod
-          image: coffeemachine_barista:1.0.0
+          image: 087812398137.dkr.ecr.us-east-1.amazonaws.com/coffeemachine/barista:1.0.0
           ports: 
           - containerPort: 80
           # resources:            
