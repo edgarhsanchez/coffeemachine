@@ -3,8 +3,11 @@ package main
 import (
 	"os"
 	"time"
+
 	"github.com/gin-gonic/contrib/gzip"
 	"github.com/gin-gonic/gin"
+
+	_ "github.com/json-iterator/go"
 )
 
 func main() {
@@ -23,7 +26,7 @@ func makeCoffeeHandle(c *gin.Context) {
 
 		result <- gin.H{
 			"status": "ok",
-			"cups": 1,
+			"cups":   1,
 		}
 	}()
 	c.JSON(200, <-result)

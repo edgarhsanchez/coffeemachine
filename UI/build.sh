@@ -10,4 +10,5 @@ chmod +x ./main
 echo "Get Client Deps"
 yarn install
 echo "building client..."
+ng version || yarn global add @angular/cli
 ng build --prod

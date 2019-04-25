@@ -3,8 +3,10 @@ package main
 import (
 	"os"
 	"time"
-	"github.com/gin-gonic/contrib/gzip"
+
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	_ "github.com/json-iterator/go"
 )
 
 func main() {
