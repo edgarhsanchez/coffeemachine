@@ -1,0 +1,14 @@
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.csprojAssemblyReference.cache
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.csproj.CoreCompileInputs.cache
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.RazorAssemblyInfo.cache
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.RazorAssemblyInfo.cs
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.AssemblyInfoInputs.cache
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.AssemblyInfo.cs
+D:\github\coffeemachine\Barista\DotNet\Barista\bin\Debug\netcoreapp2.1\Barista.deps.json
+D:\github\coffeemachine\Barista\DotNet\Barista\bin\Debug\netcoreapp2.1\Barista.runtimeconfig.json
+D:\github\coffeemachine\Barista\DotNet\Barista\bin\Debug\netcoreapp2.1\Barista.runtimeconfig.dev.json
+D:\github\coffeemachine\Barista\DotNet\Barista\bin\Debug\netcoreapp2.1\Barista.dll
+D:\github\coffeemachine\Barista\DotNet\Barista\bin\Debug\netcoreapp2.1\Barista.pdb
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.RazorTargetAssemblyInfo.cache
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.dll
+D:\github\coffeemachine\Barista\DotNet\Barista\obj\Debug\netcoreapp2.1\Barista.pdb
