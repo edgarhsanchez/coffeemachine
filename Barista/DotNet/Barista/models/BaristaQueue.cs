@@ -8,7 +8,7 @@ namespace Barista.Models
 
 
 
-    public static class Queue
+    public class Queue
     {
         private static Lazy<ConcurrentDictionary<int, Barista.Models.Order>> _queue = null;
         public static ConcurrentDictionary<int, Barista.Models.Order> Current

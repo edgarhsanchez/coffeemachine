@@ -1,8 +1,16 @@
-namespace CoffeeMachine.Models {
-     public class Order
-    {
-        public int Id { get; set; }
+using System;
 
-        public string Coffee { get; set; }
+namespace CoffeeMachine.Models {
+
+
+    public class RequestCup {
+        public int Id {get;set;}
+        public string Coffee {get;set;}
+    }
+
+    public class Order {
+        public int Id {get;set;}
+        public string Coffee {get;set;}
+        public DateTime Started {get;set;}
     }
 }

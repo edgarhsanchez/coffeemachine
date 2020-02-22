@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using Barista.Models;
+using Microphone;
+using Microsoft.Extensions.Logging;
+using Barista.Services;
 
 namespace Barista.Controllers
 {
@@ -13,6 +16,13 @@ namespace Barista.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
+        private readonly ILogger _logger;
+
+        public OrderController([FromServices]IClusterClient client, ILogger<OrderController> logger, OrderProcessorService orderProcessorService ) {
+            _logger = logger;
+            
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Order>> Get() => new ActionResult<IEnumerable<Order>>(from o in Barista.Models.Queue.Current

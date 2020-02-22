@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.ui }}
+  labels:
+    {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.ui }}
+spec:
+  replicas: {{ .Values.replicaCount.ui }}
+  selector:
+    matchLabels:
+      {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.ui }}
+  template:
+    metadata:
+      annotations:
+        "consul.hashicorp.com/connect-inject": "true"
+      labels:
+        {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.ui }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.ui.name }}:{{ .Values.images.ui.version }}"
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          ports:
+          - name: https
+            containerPort: 443
+            protocol: TCP
+          - name: http
+            containerPort: 80
+            protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.ui }}
+  labels:
+    app: {{ .Values.serviceNames.ui }}
+spec:
+  type: {{ .Values.services.ui.type }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.services.ui.port }}
+      protocol: TCP
+  selector:
+    app: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.ui }}

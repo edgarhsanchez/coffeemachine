@@ -1,15 +1,19 @@
-version: '3'
+version: '3.7'
 
 services:
     barista:
-      build: ./Barista/.
-      ports:
-        - "5003:80"
+      image: edgarhsanchez/coffeemachine-barista:1.0.0
+      build: 
+        context: ./Barista/DotNet/Barista/.
     coffeemachine:
-      build: ./CoffeeMachine/.
-      ports:
-        - "5002:80"
-    ui:
-      build: ./UI/.
-      ports:
-        - "5001:80"
+      image: edgarhsanchez/coffeemachine-coffeemachine:1.0.0
+      build: 
+        context: ./CoffeeMachine/DotNet/CoffeeMachine/.
+    # ui:
+    #   image: edgarhsanchez/coffeemachine-ui:1.0.1
+    #   build: 
+    #     context: ./UI/.
+    krakend:
+      image: edgarhsanchez/coffeemachine-krakend:1.0.0
+      build: 
+        context: ./KrakenD/.

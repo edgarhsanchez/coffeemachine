@@ -10,11 +10,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microphone.AspNet;
+using Microphone.WebApi;
+
+using Dns = System.Net.Dns;
+using AddressFamily = System.Net.Sockets.AddressFamily;
 
 namespace CoffeeMachine
 {
     public class Startup
     {
+        public static readonly Lazy<string> Host = new Lazy<string>(()=> {
+            var name = Dns.GetHostName(); // get container id
+            Console.WriteLine("dns host name: " + name);
+            var ip = Dns.GetHostEntry(name).AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+            return ip.ToString();
+        });
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -46,6 +58,8 @@ namespace CoffeeMachine
             {
                 endpoints.MapControllers();
             });
+
+            app.UseMicrophone("coffeemachine", "v1", new Uri($"http://{Host.Value}"));
         }
     }
 }

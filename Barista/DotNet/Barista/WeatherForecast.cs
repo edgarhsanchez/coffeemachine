@@ -1,6 +1,6 @@
 using System;
 
-namespace CoffeeMachine
+namespace Barista
 {
     public class WeatherForecast
     {

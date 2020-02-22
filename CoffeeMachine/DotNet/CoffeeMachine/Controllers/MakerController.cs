@@ -8,21 +8,11 @@ using Microsoft.Extensions.Logging;
 namespace CoffeeMachine.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class MakerController : ControllerBase
     {
-        
-        private static Lazy<CoffeeMachine.Models.Order> _currentOrder = null;
+        private static CoffeeMachine.Models.Order _currentOrder = null;
 
-        public CoffeeMachine.Models.Order CurrentOrder {
-            get {
-                if(_currentOrder ==null) {
-                    _currentOrder = new Lazy<Models.Order>();
-                }
-
-                return _currentOrder.Value;
-            }
-        }
         private readonly ILogger<MakerController> _logger;
 
         public MakerController(ILogger<MakerController> logger)
@@ -30,13 +20,30 @@ namespace CoffeeMachine.Controllers
             _logger = logger;
         }
 
-        [HttpGet("api/IsBusy")]
+        [HttpGet("IsBusy")]
         public ActionResult<bool> IsBusy()
         {
-            return CurrentOrder != null;
+            return _currentOrder != null && _currentOrder.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) <= 0 ;
         }
 
+        [HttpPost("StartNewCup")]
+        public ActionResult<bool> StartNewCup([FromBody] CoffeeMachine.Models.RequestCup requestCup) {
+            lock(_currentOrder) {
+                if (IsBusy().Value) {
+                    return false;
+                } else {
+                    var newOrder = new CoffeeMachine.Models.Order{
+                        Id = requestCup.Id,
+                        Coffee = requestCup.Coffee,
+                        Started = DateTime.UtcNow
+                    };
 
+                    _currentOrder = newOrder;
+
+                    return IsBusy().Value;
+                }
+            }
+        }
 
     }
 }

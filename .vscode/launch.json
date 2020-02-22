@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Barista/DotNet/Barista/bin/Debug/netcoreapp2.1/Barista.dll",
+            "program": "${workspaceFolder}/Barista/DotNet/Barista/bin/Debug/netcoreapp3.1/Barista.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Barista/DotNet/Barista",
             "stopAtEntry": false,
