@@ -1,19 +1,21 @@
-version: '3.7'
+version: "3.7"
 
 services:
-    barista:
-      image: edgarhsanchez/coffeemachine-barista:1.0.0
-      build: 
-        context: ./Barista/DotNet/Barista/.
-    coffeemachine:
-      image: edgarhsanchez/coffeemachine-coffeemachine:1.0.0
-      build: 
-        context: ./CoffeeMachine/DotNet/CoffeeMachine/.
-    # ui:
-    #   image: edgarhsanchez/coffeemachine-ui:1.0.1
-    #   build: 
-    #     context: ./UI/.
-    krakend:
-      image: edgarhsanchez/coffeemachine-krakend:1.0.0
-      build: 
-        context: ./KrakenD/.
+  barista:
+    image: edgarhsanchez/coffeemachine-barista:1.0.0
+    build:
+      context: ./DotNet/.
+      dockerfile: Barista.Dockerfile
+  coffeemachine:
+    image: edgarhsanchez/coffeemachine-coffeemachine:1.0.0
+    build:
+      context: ./DotNet/.
+      dockerfile: CoffeeMachine.Dockerfile
+  # ui:
+  #   image: edgarhsanchez/coffeemachine-ui:1.0.1
+  #   build:
+  #     context: ./UI/.
+  krakend:
+    image: edgarhsanchez/coffeemachine-krakend:1.0.0
+    build:
+      context: ./KrakenD/.

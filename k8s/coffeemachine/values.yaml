@@ -46,17 +46,17 @@ securityContext: {}
 
 services:
   coffeemachine:
-    type: NodePort
-    port: 80
+    type: ClusterIP
+    port: 35000
   ui:
     type: NodePort
-    port: 80
+    port: 35001
   barista:
-    type: NodePort
-    port: 80
+    type: ClusterIP
+    port: 35002
   krakend:
     type: NodePort
-    port: 80
+    port: 35003
 
 
 ingress:

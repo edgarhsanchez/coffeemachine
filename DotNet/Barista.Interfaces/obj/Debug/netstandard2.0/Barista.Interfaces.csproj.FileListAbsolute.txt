@@ -1,0 +1,8 @@
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/bin/Debug/netstandard2.0/Barista.Interfaces.deps.json
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/bin/Debug/netstandard2.0/Barista.Interfaces.dll
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/bin/Debug/netstandard2.0/Barista.Interfaces.pdb
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/obj/Debug/netstandard2.0/Barista.Interfaces.csprojAssemblyReference.cache
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/obj/Debug/netstandard2.0/Barista.Interfaces.AssemblyInfoInputs.cache
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/obj/Debug/netstandard2.0/Barista.Interfaces.AssemblyInfo.cs
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/obj/Debug/netstandard2.0/Barista.Interfaces.dll
+/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/obj/Debug/netstandard2.0/Barista.Interfaces.pdb

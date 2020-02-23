@@ -1,26 +1,24 @@
-# Please read through https://learn.hashicorp.com/consul/kubernetes/minikube
-# also https://www.consul.io/docs/platform/k8s/connect.html
-
-# Choose an optional name for the datacenter
 global:
   datacenter: dc1
-  
-  # Enable the Consul Web UI via a NodePort for Minikube setup
-  ui:
-    service:
-      type: NodePort
-  
-  # Enable Connect for secure communication between nodes
-  connectInject:
+  image: "consul:latest"
+# Expose the Consul UI through this LoadBalancer
+ui:
+  service:
+    type: "NodePort"
+# Allow Consul to inject the Connect proxy into Kubernetes containers
+connectInject:
+  enabled: true
+# Configure a Consul client on Kubernetes nodes. GRPC listener is required for Connect.
+client:
+  enabled: true
+  grpc: true
+# Minimal Consul configuration. Not suitable for production.
+server:
+  replicas: 1
+  bootstrapExpect: 1
+  disruptionBudget:
     enabled: true
-  
-  client:
-    enabled: true
-  
-  # Use only one Consul server for local development
-  server:
-    replicas: 3
-    bootstrapExpect: 1
-    disruptionBudget:
-      enabled: true
-      maxUnavailable: 0
+    maxUnavailable: 0
+# Sync Kubernetes and Consul services
+syncCatalog:
+  enabled: true

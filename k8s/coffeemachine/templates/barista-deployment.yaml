@@ -1,8 +1,3 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: {{ include "coffeemachine.fullname" . }}-{{ .Values.serviceNames.barista }}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +13,8 @@ spec:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/connect-service-upstreams": "coffeemachine:{{ .Values.services.coffeemachine.port }}"
+        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}:{{ .Values.services.coffeemachine.port }}"
+        "consul.hashicorp.com/service-tags": "barista"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.barista }}
     spec:
@@ -26,7 +22,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "coffeemachine.fullname" . }}-{{ .Values.serviceNames.barista }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,11 +31,8 @@ spec:
           image: "{{ .Values.images.barista.name }}:{{ .Values.images.barista.version }}"
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
-          - name: https
-            containerPort: 443
-            protocol: TCP
           - name: http
-            containerPort: 80
+            containerPort: 8080
             protocol: TCP
           livenessProbe:
             httpGet:
