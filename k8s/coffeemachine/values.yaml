@@ -34,13 +34,13 @@ services:
     type: ClusterIP
     port: 35000
   ui:
-    type: NodePort
+    type: ClusterIP
     port: 35001
   barista:
     type: ClusterIP
     port: 35002
   krakend:
-    type: NodePort
+    type: ClusterIP
     port: 35003
 
 imagePullSecrets: []

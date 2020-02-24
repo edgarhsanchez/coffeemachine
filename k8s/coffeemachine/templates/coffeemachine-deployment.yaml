@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-{{ .Values.serviceNames.coffeemachine }}
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
   labels:
     {{- include "coffeemachine.labels" . | nindent 4 }}
 spec:
@@ -25,7 +25,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-{{ .Values.serviceNames.coffeemachine }}
+        - name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.coffeemachine.name }}:{{ .Values.images.coffeemachine.version }}"
@@ -36,7 +36,11 @@ spec:
             protocol: TCP
           readinessProbe:
             httpGet:
-              path: /api/health/status
+              path: /
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -52,18 +56,18 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.coffeemachine }}
-  labels:
-    app: {{ .Values.serviceNames.coffeemachine }}
-spec:
-  type: {{ .Values.services.coffeemachine.type }}
-  ports:
-    - port: 80
-      targetPort: {{ .Values.services.coffeemachine.port }}
-      protocol: TCP
-  selector:
-    app: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.coffeemachine }}
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.coffeemachine }}
+#   labels:
+#     app: {{ .Values.serviceNames.coffeemachine }}
+# spec:
+#   type: {{ .Values.services.coffeemachine.type }}
+#   ports:
+#     - port: 80
+#       targetPort: {{ .Values.services.coffeemachine.port }}
+#       protocol: TCP
+#   selector:
+#     app: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.coffeemachine }}
