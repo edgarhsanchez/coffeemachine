@@ -15,7 +15,6 @@ using System.Net;
 using Dns = System.Net.Dns;
 using AddressFamily = System.Net.Sockets.AddressFamily;
 using Barista.Services;
-using Consul;
 
 namespace Barista
 {
@@ -33,21 +32,6 @@ namespace Barista
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            //consul setup
-            services.Configure<ConsulConfig>(Configuration.GetSection("ConsulConfig"));
-            services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
-             {
-                 var address = Configuration["ConsulConfig:Address"];
-                 consulConfig.Address = new Uri(address);
-             }));
-
-            services.AddSingleton<Func<IConsulClient>>(p => () => new ConsulClient(consulConfig =>
-              {
-                  var address = Configuration["ConsulConfig:Address"];
-                  consulConfig.Address = new Uri(address);
-              }));
-
             services.AddSingleton<CoffeeMachine.Interfaces.IClient, Barista.ExternalServices.CoffeeMachineClient>();
         }
 

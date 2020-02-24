@@ -7,8 +7,7 @@ namespace CoffeeMachine.Interfaces
 {
     public interface IClient
     {
-        Task<bool> IsBusy(Uri uri);
-        Task<bool> StartNewCup(Uri uri, RequestCup requestCup);
-        Task<IEnumerable<Uri>> Services();
+        Task<bool> IsBusy();
+        Task<bool> StartNewCup(RequestCup requestCup);
     }
 }

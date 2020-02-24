@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Consul;
 using Barista.Services;
 
 namespace Barista
@@ -24,7 +23,6 @@ namespace Barista
                 .ConfigureServices(services =>
                 {
                     services.AddLogging();
-                    services.AddHostedService<ConsulRegistration>();
                     services.AddHostedService<Barista.Services.OrderProcessorService>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

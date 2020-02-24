@@ -5,13 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Consul" Version="0.7.2.6" />
-    <PackageReference Include="Polly" Version="7.2.0" />
+    <ProjectReference Include="..\Barista.Interfaces\Barista.Interfaces.csproj" />
+    <ProjectReference Include="..\CoffeeMachine.Interfaces\CoffeeMachine.Interfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Barista.Interfaces\Barista.Interfaces.csproj" />
-    <ProjectReference Include="..\CoffeeMachine.Interfaces\CoffeeMachine.Interfaces.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
 

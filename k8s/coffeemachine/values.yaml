@@ -29,6 +29,20 @@ serviceNames:
   coffeemachine: coffeemachine
   krakend: krakend
 
+services:
+  coffeemachine:
+    type: ClusterIP
+    port: 35000
+  ui:
+    type: NodePort
+    port: 35001
+  barista:
+    type: ClusterIP
+    port: 35002
+  krakend:
+    type: NodePort
+    port: 35003
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -44,19 +58,7 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-services:
-  coffeemachine:
-    type: ClusterIP
-    port: 35000
-  ui:
-    type: NodePort
-    port: 35001
-  barista:
-    type: ClusterIP
-    port: 35002
-  krakend:
-    type: NodePort
-    port: 35003
+
 
 
 ingress:

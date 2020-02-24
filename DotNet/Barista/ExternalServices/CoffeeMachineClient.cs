@@ -1,13 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Consul;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using CoffeeMachine.Interfaces;
 using CoffeeMachine.Interfaces.DTOs;
-using Polly;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -18,22 +16,18 @@ namespace Barista.ExternalServices
 {
     public class CoffeeMachineClient : IClient
     {
-        private readonly IConfiguration _configuration;
-        private readonly IConsulClient _client;
         private readonly ILogger<CoffeeMachineClient> _logger;
 
-        public CoffeeMachineClient(IConfiguration configuration, IConsulClient client, ILogger<CoffeeMachineClient> logger)
+        public CoffeeMachineClient(ILogger<CoffeeMachineClient> logger)
         {
-            _configuration = configuration;
-            _client = client;
             _logger = logger;
         }
 
-        public async Task<bool> IsBusy(Uri uri)
+        public async Task<bool> IsBusy()
         {
             try
             {
-                var requestPath = $"{uri}api/IsBusy";
+                var requestPath = $"{GetHost()}api/maker/IsBusy";
                 _logger.LogInformation($"Making request to CoffeeMachine IsBusy at {requestPath}");
                 using (var httpClient = new HttpClient())
                 {
@@ -51,11 +45,11 @@ namespace Barista.ExternalServices
             return false;
         }
 
-        public async Task<bool> StartNewCup(Uri uri, RequestCup requestCup)
+        public async Task<bool> StartNewCup(RequestCup requestCup)
         {
             try
             {
-                var requestPath = $"{uri}api/StartNewCup";
+                var requestPath = $"{GetHost()}api/maker/StartNewCup";
                 _logger.LogInformation($"Making request to CoffeeMachine IsBusy at {requestPath}");
                 using (var httpClient = new HttpClient())
                 {
@@ -77,18 +71,10 @@ namespace Barista.ExternalServices
             return false;
         }
 
-
-        public async Task<IEnumerable<Uri>> Services()
+        private string GetHost()
         {
-            var services = await _client.Agent.Services();
-            var urls = from service in services.Response
-                       where service.Value.Tags.Any(t => t == "Consul") &&
-                             service.Value.Tags.Any(t => t == "CoffeeMachine")
-                       select new Uri($"{service.Value.Address}:{service.Value.Port}");
-
-            return urls;
+            return "http://localhost:35000/";
         }
-
 
     }
 }

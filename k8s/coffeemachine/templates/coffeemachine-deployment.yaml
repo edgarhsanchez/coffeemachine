@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "coffeemachine.fullname" . }}-{{ .Values.serviceNames.coffeemachine }}
+  name: {{ .Chart.Name }}-{{ .Values.serviceNames.coffeemachine }}
   labels:
     {{- include "coffeemachine.labels" . | nindent 4 }}
 spec:
@@ -13,6 +13,7 @@ spec:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-tags": "coffeemachine"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.coffeemachine }}
@@ -24,7 +25,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+        - name: {{ .Chart.Name }}-{{ .Values.serviceNames.coffeemachine }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.coffeemachine.name }}:{{ .Values.images.coffeemachine.version }}"
@@ -33,13 +34,9 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/health/status
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
