@@ -13,7 +13,6 @@ spec:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}:{{ .Values.services.coffeemachine.port }}"
         "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}"
         "consul.hashicorp.com/service-tags": "ubuntu"
       labels:
@@ -31,18 +30,6 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.ubuntu.name }}:{{ .Values.images.ubuntu.version }}"
           imagePullPolicy: {{ .Values.images.ubuntu.pullPolicy }}
-          ports:
-          - name: http
-            containerPort: 80
-            protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
