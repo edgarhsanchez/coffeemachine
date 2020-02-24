@@ -7,7 +7,6 @@ replicaCount:
   barista: 2
   coffeemachine: 2
   krakend: 1
-  ubuntu: 1
 
 images:
   pullPolicy: Always
@@ -33,14 +32,13 @@ serviceNames:
   barista: barista
   coffeemachine: coffeemachine
   krakend: krakend
-  ubuntu: ubuntu
 
 services:
   coffeemachine:
     type: ClusterIP
     port: 35000
   ui:
-    type: ClusterIP
+    type: NodePort
     port: 35001
   barista:
     type: ClusterIP
@@ -48,9 +46,6 @@ services:
   krakend:
     type: ClusterIP
     port: 35003
-  ubuntu:
-    type: NodePort
-    port: 80
 
 imagePullSecrets: []
 nameOverride: ""

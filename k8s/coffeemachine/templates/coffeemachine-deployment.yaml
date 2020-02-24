@@ -1,9 +1,14 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+  name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
   labels:
-    {{- include "coffeemachine.labels" . | nindent 4 }}
+    {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.coffeemachine }}
 spec:
   replicas: {{ .Values.replicaCount.coffeemachine }}
   selector:
@@ -13,7 +18,8 @@ spec:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/service-port": "http"
+        "consul.hashicorp.com/service-port": "service-port"
+        "consul.hashicorp.com/service-name": {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
         "consul.hashicorp.com/service-tags": "coffeemachine"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.coffeemachine }}
@@ -25,23 +31,27 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+        - name: container-{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.coffeemachine.name }}:{{ .Values.images.coffeemachine.version }}"
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
           - name: http
+            containerPort: 80
+            protocol: TCP
+          - name: https
+            containerPort: 443
+            protocol: TCP
+          - name: service-port
             containerPort: 8080
             protocol: TCP
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            tcpSocket:
+              port: service-port
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
+            tcpSocket:
+              port: service-port
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -56,18 +66,18 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.coffeemachine }}
-#   labels:
-#     app: {{ .Values.serviceNames.coffeemachine }}
-# spec:
-#   type: {{ .Values.services.coffeemachine.type }}
-#   ports:
-#     - port: 80
-#       targetPort: {{ .Values.services.coffeemachine.port }}
-#       protocol: TCP
-#   selector:
-#     app: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.coffeemachine }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+  labels:
+    app: {{ .Values.serviceNames.coffeemachine }}
+spec:
+  type: {{ .Values.services.coffeemachine.type }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.services.coffeemachine.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}

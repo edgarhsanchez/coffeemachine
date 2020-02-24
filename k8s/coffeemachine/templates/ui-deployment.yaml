@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+  name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}
   labels:
     {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.ui }}
 spec:
@@ -14,10 +20,14 @@ spec:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/service-port": "http"
+        "consul.hashicorp.com/service-tags": "ui"
+        "consul.hashicorp.com/service-name": "{{ .Chart.Name }}{{ .Values.serviceNames.ui }}"
         "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.ui }}
     spec:
+      volumes: 
+      - name: shared-data
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -25,28 +35,30 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.images.ui.name }}:{{ .Values.images.ui.version }}"
-          imagePullPolicy: {{ .Values.images.pullPolicy }}
-          ports:
-          - name: https
-            containerPort: 443
-            protocol: TCP
-          - name: http
-            containerPort: 80
-            protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+      - name: container-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.images.ui.name }}:{{ .Values.images.ui.version }}"
+        volumeMounts:
+        - name: shared-data
+          mountPath: /usr/share/nginx/html
+        imagePullPolicy: {{ .Values.images.pullPolicy }}
+        ports:
+        - name: https
+          containerPort: 443
+          protocol: TCP
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: service-port
+        livenessProbe:
+          tcpSocket:
+            port: service-port
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+      serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -59,18 +71,18 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.ui }}
-#   labels:
-#     app: {{ .Values.serviceNames.ui }}
-# spec:
-#   type: {{ .Values.services.ui.type }}
-#   ports:
-#     - port: 80
-#       targetPort: {{ .Values.services.ui.port }}
-#       protocol: TCP
-#   selector:
-#     app: {{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.ui }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+  labels:
+    app: {{ .Values.serviceNames.ui }}
+spec:
+  type: {{ .Values.services.ui.type }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.services.ui.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
