@@ -1,4 +1,10 @@
-﻿using CoffeeMachine.Interfaces.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using CoffeeMachine.Interfaces.DTOs;
 
 namespace CoffeeMachine.Controllers
 {
