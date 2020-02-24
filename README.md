@@ -29,18 +29,39 @@ Install chocolatey  (https://chocolatey.org/install)
 
 4.  Clone the repo into your $GOHOME/src folder.  Chocolatey configures golang with most current approach for the $GOHOME setting and this is sufficient for this project.  
 
-## AWS
+## Install Helm
+
+go get it  :)
+
+```
+brew install helm
+```
+or..
+```
+choco install kubernetes-helm
+```
+
+more on this at: https://github.com/helm/helm
+
+### Consul-Helm
+
+Clone the helm chart for consul and follow these instructions.
+NOTE:  Please look at using git clone --single-branch option and pointing to a stable branch of this chart.
+https://www.consul.io/docs/platform/k8s/run.html
+
+Once you've cloned the consul-helm repo into the root this project you can execute the following.
+```
+helm install hashicorp -f ./k8s/consul-config-development.yaml ./consul-helm
+```
 
 
-On aws after creating a cluster you will need to run two cloudformations
-1. setting up your EKS Cluster VPC .. https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
-2. setting up your worker nodes  .. https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+### Install Coffeemachien
 
-After running these two cloudformations you will be able to see the nodes created soon after.  As a consequence to the nodes being creating the pods defined in the 'local.deploy.sh' will also be started.
+So now it's time to install this application
 
-These and the entire kubernetes infrastructure can be seen by using 'kubectl get all
+execute the following code
+```
+helm install coffeemachine ./k8s/coffeemachine
+```
 
-The aws-auth-cm.yaml file also contained in the project is an example for the node IAM configuration and is run last after the steps in the 'getting-started.html' from AWS is followed.
-
-(more to come)
-
+That's it
