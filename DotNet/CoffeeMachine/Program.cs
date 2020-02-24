@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using CoffeeMachine.Services;
 
 namespace CoffeeMachine
 {
@@ -24,7 +23,6 @@ namespace CoffeeMachine
                 .ConfigureServices(services =>
                 {
                     services.AddLogging();
-                    services.AddHostedService<ConsulRegistration>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

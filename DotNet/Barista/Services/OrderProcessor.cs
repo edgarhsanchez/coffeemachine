@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Http;
+using CoffeeMachine.Interfaces;
 
 namespace Barista.Services
 {
