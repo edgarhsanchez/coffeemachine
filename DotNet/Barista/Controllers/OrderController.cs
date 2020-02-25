@@ -53,9 +53,9 @@ namespace Barista.Controllers
 
         //See past orders
         [HttpGet("PastOrders")]
-        public IEnumerable<Order> GetPastOrders() {
+        public async Task<IEnumerable<CoffeeMachine.Interfaces.DTOs.Order>> GetPastOrders() {
             _logger.LogInformation("passed orders retrieved");
-            return _taskQueue.PastOrders();
+            return await _coffeeMachineClient.GetPastOrders();
         }
     }
 }

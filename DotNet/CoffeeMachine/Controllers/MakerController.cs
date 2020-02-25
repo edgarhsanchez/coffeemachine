@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CoffeeMachine.Interfaces.DTOs;
+using System.Collections.Concurrent;
 
 namespace CoffeeMachine.Controllers
 {
@@ -14,7 +15,8 @@ namespace CoffeeMachine.Controllers
     {
 
         private object LockObject = new object();
-        private static Order _currentOrder = null;
+
+        private static ConcurrentBag<Order> WorkingOrders = new ConcurrentBag<Order>();
 
         private readonly ILogger<MakerController> _logger;
 
@@ -27,8 +29,8 @@ namespace CoffeeMachine.Controllers
         public bool IsBusy()
         {
             _logger.LogInformation("Busy called");
-            
-            return _currentOrder != null && _currentOrder.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) <= 0;
+            var currentOrder = WorkingOrders.FirstOrDefault(order => order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) > 0);
+            return currentOrder != null;
             
         }
 
@@ -50,11 +52,18 @@ namespace CoffeeMachine.Controllers
                     Started = DateTime.UtcNow
                 };
 
-                _currentOrder = newOrder;
+                WorkingOrders.Add(newOrder);
 
                 return IsBusy();
             }
             
+        }
+
+        //See past orders
+        [HttpGet("PastOrders")]
+        public IEnumerable<Order> GetPastOrders() {
+            _logger.LogInformation("passed orders retrieved");
+            return WorkingOrders.Where(order =>order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) < 0 );
         }
 
     }

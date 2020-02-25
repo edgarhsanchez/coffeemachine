@@ -6,3 +6,11 @@
 /Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/CoffeeMachine.Interfaces/obj/Debug/netstandard2.0/CoffeeMachine.Interfaces.AssemblyInfo.cs
 /Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/CoffeeMachine.Interfaces/obj/Debug/netstandard2.0/CoffeeMachine.Interfaces.dll
 /Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/CoffeeMachine.Interfaces/obj/Debug/netstandard2.0/CoffeeMachine.Interfaces.pdb
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\bin\Debug\netstandard2.0\CoffeeMachine.Interfaces.deps.json
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\bin\Debug\netstandard2.0\CoffeeMachine.Interfaces.dll
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\bin\Debug\netstandard2.0\CoffeeMachine.Interfaces.pdb
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\obj\Debug\netstandard2.0\CoffeeMachine.Interfaces.csprojAssemblyReference.cache
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\obj\Debug\netstandard2.0\CoffeeMachine.Interfaces.AssemblyInfoInputs.cache
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\obj\Debug\netstandard2.0\CoffeeMachine.Interfaces.AssemblyInfo.cs
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\obj\Debug\netstandard2.0\CoffeeMachine.Interfaces.dll
+C:\labs\coffeemachine\DotNet\CoffeeMachine.Interfaces\obj\Debug\netstandard2.0\CoffeeMachine.Interfaces.pdb

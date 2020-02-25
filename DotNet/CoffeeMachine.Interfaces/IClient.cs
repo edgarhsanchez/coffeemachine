@@ -9,5 +9,6 @@ namespace CoffeeMachine.Interfaces
     {
         Task<bool> IsBusy();
         Task<bool> StartNewCup(RequestCup requestCup);
+        Task<IEnumerable<Order>> GetPastOrders();
     }
 }

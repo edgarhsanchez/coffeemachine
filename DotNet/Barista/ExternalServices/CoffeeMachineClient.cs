@@ -79,6 +79,33 @@ namespace Barista.ExternalServices
             return false;
         }
 
+        public async Task<IEnumerable<Order>> GetPastOrders() {
+            try
+            {
+                var requestPath = $"{GetHost()}api/maker/PastOrders";
+                _logger.LogInformation($"Making request to CoffeeMachine StartNewCup at {requestPath}");
+                using (var httpClient = new HttpClient())
+                {
+                    
+                
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var response = await httpClient.GetAsync(requestPath);
+                    response.EnsureSuccessStatusCode();
+                    var content = await response.Content.ReadAsStringAsync();
+                    var orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(content);
+                    _logger.LogInformation($"GetPastOrders retrieved");
+                    return orders;
+                
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            return null;
+        }
+
         private string GetHost()
         {
             return "http://localhost:35000/";
