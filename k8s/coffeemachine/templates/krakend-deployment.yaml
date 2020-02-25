@@ -14,13 +14,16 @@ spec:
   selector:
     matchLabels:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.krakend }}
+      app: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
   template:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-name": {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.krakend }}
+        app: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -35,34 +38,11 @@ spec:
           image: "{{ .Values.images.krakend.name }}:{{ .Values.images.krakend.version }}"
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
-          - name: https
-            containerPort: 443
+          - containerPort: 8080
+            name: "http"
             protocol: TCP
-          - name: http
-            containerPort: 80
-            protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+          command: [ "/usr/bin/krakend" ]
+          args: [ "run", "-d", "-c", "/etc/krakend/krakend.json", "-p", "8080" ]
 ---
 apiVersion: v1
 kind: Service
@@ -73,7 +53,7 @@ metadata:
 spec:
   type: {{ .Values.services.krakend.type }}
   ports:
-    - port: 80
+    - port: 8080
       targetPort: {{ .Values.services.krakend.port }}
       protocol: TCP
   selector:

@@ -8,21 +8,23 @@ kind: Deployment
 metadata:
   name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
   labels:
-    {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.coffeemachine }}
+    {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.coffeemachine }}    
 spec:
   replicas: {{ .Values.replicaCount.coffeemachine }}
   selector:
     matchLabels:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.coffeemachine }}
+      app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
   template:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/service-port": "service-port"
+        "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-name": {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
         "consul.hashicorp.com/service-tags": "coffeemachine"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.coffeemachine }}
+        app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -43,15 +45,12 @@ spec:
           - name: https
             containerPort: 443
             protocol: TCP
-          - name: service-port
-            containerPort: 8080
-            protocol: TCP
-          readinessProbe:
-            tcpSocket:
-              port: service-port
           livenessProbe:
-            tcpSocket:
-              port: service-port
+            httpGet:
+              path: "/health"
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

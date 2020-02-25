@@ -8,22 +8,24 @@ kind: Deployment
 metadata:
   name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.barista }}
   labels:
-    {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.barista }}
+    {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.barista }}    
 spec:
   replicas: {{ .Values.replicaCount.barista }}
   selector:
     matchLabels:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.barista }}
+      app: {{ .Chart.Name }}{{ .Values.serviceNames.barista }}
   template:
     metadata:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/service-port": "service-port"
+        "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-tags": "barista"
         "consul.hashicorp.com/service-name": "{{ .Chart.Name }}{{ .Values.serviceNames.barista }}"
-        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}:{{ .Values.services.coffeemachine.port }}"
+        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}:{{ .Values.services.coffeemachine.port }}:{{ .Values.datacenter }}"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.barista }}
+        app: {{ .Chart.Name }}{{ .Values.serviceNames.barista }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -38,9 +40,6 @@ spec:
           image: "{{ .Values.images.barista.name }}:{{ .Values.images.barista.version }}"
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
-          - name: service-port
-            containerPort: 8080
-            protocol: TCP
           - name: http
             containerPort: 80
             protocol: TCP
@@ -50,7 +49,7 @@ spec:
           livenessProbe:
             httpGet:
               path: "/health"
-              port: service-port
+              port: http
             initialDelaySeconds: 5
             periodSeconds: 5
           resources:

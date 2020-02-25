@@ -8,6 +8,8 @@ replicaCount:
   coffeemachine: 2
   krakend: 1
 
+datacenter: dc1
+
 images:
   pullPolicy: Always
   ui: 
@@ -22,10 +24,6 @@ images:
   krakend: 
     name: edgarhsanchez/coffeemachine-krakend
     version: 1.0.0
-  ubuntu:
-    pullPolicy: IfNotPresent
-    version: latest
-    name: ubuntu
 
 serviceNames:
   ui: ui
@@ -38,14 +36,14 @@ services:
     type: ClusterIP
     port: 35000
   ui:
-    type: NodePort
+    type: ClusterIP
     port: 35001
   barista:
     type: ClusterIP
     port: 35002
   krakend:
-    type: ClusterIP
-    port: 35003
+    type: NodePort
+    port: 8080
 
 imagePullSecrets: []
 nameOverride: ""

@@ -15,6 +15,7 @@ spec:
   selector:
     matchLabels:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.ui }}
+      app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
   template:
     metadata:
       annotations:
@@ -22,9 +23,10 @@ spec:
         "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-tags": "ui"
         "consul.hashicorp.com/service-name": "{{ .Chart.Name }}{{ .Values.serviceNames.ui }}"
-        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}"
+        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}:{{ .Values.datacenter }}"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.ui }}
+        app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
     spec:
       volumes: 
       - name: shared-data
@@ -52,10 +54,10 @@ spec:
           protocol: TCP
         readinessProbe:
           tcpSocket:
-            port: service-port
+            port: http
         livenessProbe:
           tcpSocket:
-            port: service-port
+            port: http
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
       serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}

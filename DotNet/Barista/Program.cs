@@ -27,7 +27,8 @@ namespace Barista
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls($"http://0.0.0.0:8080")
+                    webBuilder
+                        .UseUrls($"http://0.0.0.0:80")
                         .UseStartup<Startup>();
                 });
     }
