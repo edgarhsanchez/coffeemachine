@@ -28,6 +28,7 @@ namespace Barista.Factories {
                     });
 
                     if(!orderProcessed) {
+                        await Task.Delay(TimeSpan.FromSeconds(10));
                         queue.QueueBackgroundWorkItem(order, TaskFactory.CreateMakeCoffeeJob(logger, coffeeMachineClient, order, queue));
                     }
                     
@@ -35,6 +36,7 @@ namespace Barista.Factories {
                 catch (Exception ex)
                 {
                     logger.LogError(ex, ex.Message);
+                    await Task.Delay(TimeSpan.FromSeconds(10));
                 }
             });
             return newTask;

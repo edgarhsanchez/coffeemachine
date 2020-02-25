@@ -29,12 +29,16 @@ namespace Barista.ExternalServices
             {
                 var requestPath = $"{GetHost()}api/maker/IsBusy";
                 _logger.LogInformation($"Making request to CoffeeMachine IsBusy at {requestPath}");
+                
                 using (var httpClient = new HttpClient())
                 {
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var response = await httpClient.GetAsync(requestPath).ConfigureAwait(false);
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    return JsonConvert.DeserializeObject<bool>(content);
+                    var response = await httpClient.GetAsync(requestPath);
+                    response.EnsureSuccessStatusCode();
+                    var content = await response.Content.ReadAsStringAsync();
+                    var isBusy = JsonConvert.DeserializeObject<bool>(content);
+                    _logger.LogInformation($"IsBusy: {isBusy}");
+                    return isBusy;
                 }
             }
             catch (Exception ex)
@@ -50,17 +54,21 @@ namespace Barista.ExternalServices
             try
             {
                 var requestPath = $"{GetHost()}api/maker/StartNewCup";
-                _logger.LogInformation($"Making request to CoffeeMachine IsBusy at {requestPath}");
+                _logger.LogInformation($"Making request to CoffeeMachine StartNewCup at {requestPath}");
                 using (var httpClient = new HttpClient())
                 {
+                    
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var json = JsonConvert.SerializeObject(requestCup);
                     var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    var response = await httpClient.PostAsync(requestPath, stringContent).ConfigureAwait(false);
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    return JsonConvert.DeserializeObject<bool>(content) && response.IsSuccessStatusCode;
+                    var response = await httpClient.PostAsync(requestPath, stringContent);
+                    response.EnsureSuccessStatusCode();
+                    var content = await response.Content.ReadAsStringAsync();
+                    var startedNewCup = JsonConvert.DeserializeObject<bool>(content);
+                    _logger.LogInformation($"StartNewCup: {startedNewCup}");
+                    return startedNewCup;
                 }
             }
             catch (Exception ex)

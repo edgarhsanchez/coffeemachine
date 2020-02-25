@@ -15,6 +15,8 @@ public interface IBackgroundTaskQueue
         CancellationToken cancellationToken);
 
     List<Order> QueuedOrders();
+
+    List<Order> PastOrders();
 }
 
 public class BackgroundTaskQueue : IBackgroundTaskQueue
@@ -25,6 +27,7 @@ public class BackgroundTaskQueue : IBackgroundTaskQueue
 
     private ConcurrentDictionary<Func<CancellationToken, Task>, Order> _dictOrders = new ConcurrentDictionary<Func<CancellationToken, Task>, Order>();
 
+    private ConcurrentDictionary<int, Order> _pastOrders = new ConcurrentDictionary<int, Order>();
     public void QueueBackgroundWorkItem(Order order,
         Func<CancellationToken, Task> workItem)
     {
@@ -49,6 +52,11 @@ public class BackgroundTaskQueue : IBackgroundTaskQueue
         _workItems.TryDequeue(out var workItem);
         Order order;
         _dictOrders.TryRemove(workItem, out order);
+        _pastOrders[order.Id] = order;
         return new Tuple<Func<CancellationToken, Task>, Order>(workItem, order);
+    }
+
+    public List<Order> PastOrders() {
+        return _pastOrders.Values.ToList();
     }
 }

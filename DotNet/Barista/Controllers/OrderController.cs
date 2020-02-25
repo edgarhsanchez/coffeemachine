@@ -50,5 +50,12 @@ namespace Barista.Controllers
             _logger.LogInformation("order added");
             _taskQueue.QueueBackgroundWorkItem(order, Factories.TaskFactory.CreateMakeCoffeeJob(_logger, _coffeeMachineClient, order, _taskQueue));
         }
+
+        //See past orders
+        [HttpGet("PastOrders")]
+        public IEnumerable<Order> GetPastOrders() {
+            _logger.LogInformation("passed orders retrieved");
+            return _taskQueue.PastOrders();
+        }
     }
 }

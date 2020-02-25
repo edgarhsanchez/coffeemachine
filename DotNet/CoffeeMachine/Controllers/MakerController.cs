@@ -12,6 +12,8 @@ namespace CoffeeMachine.Controllers
     [Route("api/[controller]")]
     public class MakerController : ControllerBase
     {
+
+        private object LockObject = new object();
         private static Order _currentOrder = null;
 
         private readonly ILogger<MakerController> _logger;
@@ -22,36 +24,37 @@ namespace CoffeeMachine.Controllers
         }
 
         [HttpGet("IsBusy")]
-        public ActionResult<bool> IsBusy()
+        public bool IsBusy()
         {
             _logger.LogInformation("Busy called");
+            
             return _currentOrder != null && _currentOrder.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) <= 0;
+            
         }
 
         [HttpPost("StartNewCup")]
-        public ActionResult<bool> StartNewCup([FromBody] RequestCup requestCup)
+        public bool StartNewCup([FromBody] RequestCup requestCup)
         {
             _logger.LogInformation("StartNewCup called");
-            lock (_currentOrder)
+            
+            if (IsBusy())
             {
-                if (IsBusy().Value)
-                {
-                    return false;
-                }
-                else
-                {
-                    var newOrder = new Order
-                    {
-                        Id = requestCup.Id,
-                        Coffee = requestCup.Coffee,
-                        Started = DateTime.UtcNow
-                    };
-
-                    _currentOrder = newOrder;
-
-                    return IsBusy().Value;
-                }
+                return false;
             }
+            else
+            {
+                var newOrder = new Order
+                {
+                    Id = requestCup.Id,
+                    Coffee = requestCup.Coffee,
+                    Started = DateTime.UtcNow
+                };
+
+                _currentOrder = newOrder;
+
+                return IsBusy();
+            }
+            
         }
 
     }

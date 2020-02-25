@@ -23,7 +23,7 @@ spec:
         "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-tags": "ui"
         "consul.hashicorp.com/service-name": "{{ .Chart.Name }}{{ .Values.serviceNames.ui }}"
-        "consul.hashicorp.com/connect-service-upstreams": "{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}:{{ .Values.datacenter }}"
+        "consul.hashicorp.com/connect-service-upstreams": "container-{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}:{{ .Values.datacenter }}"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.ui }}
         app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
