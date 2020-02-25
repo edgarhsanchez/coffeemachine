@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-using Barista.Models;
 using Microsoft.Extensions.Logging;
 using Barista.Services;
 using Barista.Interfaces;
@@ -18,10 +17,13 @@ namespace Barista.Controllers
     public class OrderController : ControllerBase
     {
         private readonly ILogger _logger;
-
-        public OrderController(ILogger<OrderController> logger, OrderProcessorService orderProcessorService)
+        private readonly IBackgroundTaskQueue _taskQueue;
+        private readonly CoffeeMachine.Interfaces.IClient _coffeeMachineClient;
+        public OrderController(ILogger<OrderController> logger, IBackgroundTaskQueue taskQueue, CoffeeMachine.Interfaces.IClient coffeeMachineClient)
         {
             _logger = logger;
+            _taskQueue = taskQueue;
+            _coffeeMachineClient = coffeeMachineClient;
         }
 
         // GET api/values
@@ -29,8 +31,8 @@ namespace Barista.Controllers
         public ActionResult<IEnumerable<Order>> Get()
         {
             _logger.LogInformation("orders retrieved");
-            return new ActionResult<IEnumerable<Order>>(from o in Barista.Models.Queue.Current
-                                                        select o.Value);
+            return new ActionResult<IEnumerable<Order>>(from o in _taskQueue.QueuedOrders()
+                                                        select o);
         }
 
         // GET api/values/5
@@ -38,32 +40,15 @@ namespace Barista.Controllers
         public ActionResult<Order> Get(int id)
         {
             _logger.LogInformation("single order retrieved");
-            return new ActionResult<Order>(Barista.Models.Queue.Current[id]);
+            return new ActionResult<Order>(_taskQueue.QueuedOrders().FirstOrDefault(o=>o.Id == id));
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] Order value)
+        public void Post([FromBody] Order order)
         {
             _logger.LogInformation("order added");
-            Barista.Models.Queue.Current[value.Id] = value;
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Order value)
-        {
-            _logger.LogInformation("order updated");
-            Barista.Models.Queue.Current[value.Id] = value;
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            _logger.LogInformation("order deleted");
-            Order val;
-            Barista.Models.Queue.Current.TryRemove(id, out val);
+            _taskQueue.QueueBackgroundWorkItem(order, Factories.TaskFactory.CreateMakeCoffeeJob(_logger, _coffeeMachineClient, order, _taskQueue));
         }
     }
 }

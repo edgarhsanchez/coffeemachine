@@ -54,7 +54,7 @@ spec:
   type: {{ .Values.services.krakend.type }}
   ports:
     - port: 8080
-      targetPort: {{ .Values.services.krakend.port }}
+      targetPort: 8080
       protocol: TCP
   selector:
     app: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}

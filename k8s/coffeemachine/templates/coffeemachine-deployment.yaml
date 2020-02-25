@@ -76,7 +76,7 @@ spec:
   type: {{ .Values.services.coffeemachine.type }}
   ports:
     - port: 80
-      targetPort: {{ .Values.services.coffeemachine.port }}
+      targetPort: 80
       protocol: TCP
   selector:
     app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}

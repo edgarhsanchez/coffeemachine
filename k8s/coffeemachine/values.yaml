@@ -33,13 +33,13 @@ serviceNames:
 
 services:
   coffeemachine:
-    type: ClusterIP
+    type: NodePort
     port: 35000
   ui:
-    type: ClusterIP
+    type: NodePort
     port: 35001
   barista:
-    type: ClusterIP
+    type: NodePort
     port: 35002
   krakend:
     type: NodePort

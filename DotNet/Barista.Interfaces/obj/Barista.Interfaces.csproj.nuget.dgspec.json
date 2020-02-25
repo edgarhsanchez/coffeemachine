@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/Barista.Interfaces.csproj": {}
+    "C:\\labs\\coffeemachine\\DotNet\\Barista.Interfaces\\Barista.Interfaces.csproj": {}
   },
   "projects": {
-    "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/Barista.Interfaces.csproj": {
+    "C:\\labs\\coffeemachine\\DotNet\\Barista.Interfaces\\Barista.Interfaces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/Barista.Interfaces.csproj",
+        "projectUniqueName": "C:\\labs\\coffeemachine\\DotNet\\Barista.Interfaces\\Barista.Interfaces.csproj",
         "projectName": "Barista.Interfaces",
-        "projectPath": "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/Barista.Interfaces.csproj",
-        "packagesPath": "/Users/edgarsanchez/.nuget/packages/",
-        "outputPath": "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/Barista.Interfaces/obj/",
+        "projectPath": "C:\\labs\\coffeemachine\\DotNet\\Barista.Interfaces\\Barista.Interfaces.csproj",
+        "packagesPath": "C:\\Users\\edgar.sanchez\\.nuget\\packages\\",
+        "outputPath": "C:\\labs\\coffeemachine\\DotNet\\Barista.Interfaces\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "/Users/edgarsanchez/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\edgar.sanchez\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -56,7 +53,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

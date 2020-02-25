@@ -24,12 +24,14 @@ namespace CoffeeMachine.Controllers
         [HttpGet("IsBusy")]
         public ActionResult<bool> IsBusy()
         {
+            _logger.LogInformation("Busy called");
             return _currentOrder != null && _currentOrder.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) <= 0;
         }
 
         [HttpPost("StartNewCup")]
         public ActionResult<bool> StartNewCup([FromBody] RequestCup requestCup)
         {
+            _logger.LogInformation("StartNewCup called");
             lock (_currentOrder)
             {
                 if (IsBusy().Value)

@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Barista.ExternalServices
 {
-    public class CoffeeMachineClient : IClient
+    public class CoffeeMachineClient : CoffeeMachine.Interfaces.IClient
     {
         private readonly ILogger<CoffeeMachineClient> _logger;
 

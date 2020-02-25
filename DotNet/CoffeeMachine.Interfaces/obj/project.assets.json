@@ -180,23 +180,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/edgarsanchez/.nuget/packages/": {},
-    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "C:\\Users\\edgar.sanchez\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/CoffeeMachine.Interfaces/CoffeeMachine.Interfaces.csproj",
+      "projectUniqueName": "C:\\labs\\coffeemachine\\DotNet\\CoffeeMachine.Interfaces\\CoffeeMachine.Interfaces.csproj",
       "projectName": "CoffeeMachine.Interfaces",
-      "projectPath": "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/CoffeeMachine.Interfaces/CoffeeMachine.Interfaces.csproj",
-      "packagesPath": "/Users/edgarsanchez/.nuget/packages/",
-      "outputPath": "/Users/edgarsanchez/Documents/github.com/coffeemachine/DotNet/CoffeeMachine.Interfaces/obj/",
+      "projectPath": "C:\\labs\\coffeemachine\\DotNet\\CoffeeMachine.Interfaces\\CoffeeMachine.Interfaces.csproj",
+      "packagesPath": "C:\\Users\\edgar.sanchez\\.nuget\\packages\\",
+      "outputPath": "C:\\labs\\coffeemachine\\DotNet\\CoffeeMachine.Interfaces\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "/Users/edgarsanchez/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\edgar.sanchez\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
@@ -235,7 +231,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

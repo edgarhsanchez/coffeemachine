@@ -13,59 +13,51 @@ namespace Barista.Services
 
     public class OrderProcessorService : BackgroundService
     {
-        #region Private fields
-        private ILogger<OrderProcessorService> _logger;
-        private CoffeeMachine.Interfaces.IClient _coffeeMachineClient;
-        #endregion
+         private readonly ILogger<OrderProcessorService> _logger;
 
-        public OrderProcessorService(ILogger<OrderProcessorService> logger, CoffeeMachine.Interfaces.IClient coffeeMachineClient)
-        {
-            _coffeeMachineClient = coffeeMachineClient;
-            _logger = logger;
-        }
+    public OrderProcessorService(IBackgroundTaskQueue taskQueue, 
+        ILogger<OrderProcessorService> logger)
+    {
+        TaskQueue = taskQueue;
+        _logger = logger;
+    }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    public IBackgroundTaskQueue TaskQueue { get; }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation(
+            $"Queued Hosted Service is running.{Environment.NewLine}" +
+            $"{Environment.NewLine}Tap W to add a work item to the " +
+            $"background queue.{Environment.NewLine}");
+
+        await BackgroundProcessing(stoppingToken);
+    }
+
+    private async Task BackgroundProcessing(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
+            var workItem = 
+                await TaskQueue.DequeueAsync(stoppingToken);
 
             try
             {
-
-                _logger.LogInformation("Processing orders...");
-                foreach (var orderKeyValue in Barista.Models.Queue.Current)
-                {
-
-                    try
-                    {
-                        var isBusy = await _coffeeMachineClient.IsBusy();
-                        if (!isBusy)
-                        {
-                            var orderProcessed = await _coffeeMachineClient.StartNewCup(new CoffeeMachine.Interfaces.DTOs.RequestCup
-                            {
-                                Id = orderKeyValue.Value.Id,
-                                Coffee = orderKeyValue.Value.Coffee
-                            });
-                            if (!orderProcessed)
-                            {
-                                continue;
-                            }
-                            break;
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-
-
-
-                }
-                _logger.LogInformation("Finished processing orders");
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                await workItem.Item1(stoppingToken);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, 
+                    "Error occurred executing {WorkItem}.", nameof(workItem));
             }
         }
+    }
+
+    public override async Task StopAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("Queued Hosted Service is stopping.");
+
+        await base.StopAsync(stoppingToken);
+    }
     }
 }
