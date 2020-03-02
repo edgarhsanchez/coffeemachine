@@ -77,33 +77,15 @@ http://azure.github.io/amqpnetlite/articles/hello_amqp.html
 
 ## Using AMQP 1.0 in Development
 
-Install RabbitMQ (Option 1)
+The easiest way to test this is to create a cloud based AMQP1.0 service.  Azure Service Bus or other.
 
-Run the following command
-```
-helm install rabbit --set rabbitmq.username=admin,rabbitmq.password=secretpassword,volumePermissions.enabled=true,rabbitmq.plugins="rabbitmq_amqp1_0 rabbitmq_management rabbitmq_peer_discovery_k8s" stable/rabbitmq
-```
-echo "ErLang Cookie : $(kubectl get secret --namespace default rabbit-rabbitmq -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
-```
-if user creds don't work 'kubectl' into the running node with the following
-```
-kubectl exec -it rabbit-rabbitmq-0 /bin/bash
-rabbitmqctl add_user guest password .* .* .*
-rabbitmqctl set_user_tags guest administrator
-```
+The setup of a Queue on Azure Service Bus is farely easy and some additional information is below.
 
-or nats.io
-```
-helm install my-release --set auth.enabled=true,auth.user=guest,auth.password=T0pS3cr3t stable/nats
-```
+https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-authentication-and-authorization
 
-
-
-NOTE:  The installation will output all the needed information to configure string within the project in order to use the development AMQP service and management interface.  In order to feed the services events from outside the cluster you will need to use port forwarding to make the internal service accessible from the outside.
 
 Great Links:
 http://azure.github.io/amqpnetlite/
-https://github.com/helm/charts/tree/master/stable/rabbitmq
 
 
 ## Tracing
