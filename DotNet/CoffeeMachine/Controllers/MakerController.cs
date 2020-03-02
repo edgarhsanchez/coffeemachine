@@ -16,8 +16,12 @@ namespace CoffeeMachine.Controllers
 
         private object LockObject = new object();
 
-        private static ConcurrentBag<Order> WorkingOrders = new ConcurrentBag<Order>();
-
+        private static ConcurrentBag<Order> _workingOrders = new ConcurrentBag<Order>();
+        public static ConcurrentBag<Order> WorkingOrders {
+            get{
+                return _workingOrders;
+            }
+        }
         private readonly ILogger<MakerController> _logger;
 
         public MakerController(ILogger<MakerController> logger)
@@ -29,7 +33,7 @@ namespace CoffeeMachine.Controllers
         public bool IsBusy()
         {
             _logger.LogInformation("Busy called");
-            var currentOrder = WorkingOrders.FirstOrDefault(order => order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) > 0);
+            var currentOrder = _workingOrders.FirstOrDefault(order => order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) > 0);
             return currentOrder != null;
             
         }
@@ -52,7 +56,7 @@ namespace CoffeeMachine.Controllers
                     Started = DateTime.UtcNow
                 };
 
-                WorkingOrders.Add(newOrder);
+                _workingOrders.Add(newOrder);
 
                 return IsBusy();
             }
@@ -63,7 +67,7 @@ namespace CoffeeMachine.Controllers
         [HttpGet("PastOrders")]
         public IEnumerable<Order> GetPastOrders() {
             _logger.LogInformation("passed orders retrieved");
-            return WorkingOrders.Where(order =>order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) < 0 );
+            return _workingOrders.Where(order =>order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) < 0 );
         }
 
     }

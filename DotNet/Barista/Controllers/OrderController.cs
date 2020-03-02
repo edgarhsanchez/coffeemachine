@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Barista.Services;
 using Barista.Interfaces;
 using Barista.Interfaces.DTOs;
+using CoffeeMachine.Interfaces;
 
 namespace Barista.Controllers
 {
@@ -19,11 +20,13 @@ namespace Barista.Controllers
         private readonly ILogger _logger;
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly CoffeeMachine.Interfaces.IClient _coffeeMachineClient;
-        public OrderController(ILogger<OrderController> logger, IBackgroundTaskQueue taskQueue, CoffeeMachine.Interfaces.IClient coffeeMachineClient)
+        private readonly CoffeeMachine.Interfaces.IMessagingClient _messengerClient;
+        public OrderController(ILogger<OrderController> logger, IBackgroundTaskQueue taskQueue, CoffeeMachine.Interfaces.IClient coffeeMachineClient, CoffeeMachine.Interfaces.IMessagingClient messengerClient)
         {
             _logger = logger;
             _taskQueue = taskQueue;
             _coffeeMachineClient = coffeeMachineClient;
+            _messengerClient = messengerClient;
         }
 
         // GET api/values
@@ -45,10 +48,15 @@ namespace Barista.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] Order order)
+        public async Task Post([FromBody] Order order)
         {
             _logger.LogInformation("order added");
-            _taskQueue.QueueBackgroundWorkItem(order, Factories.TaskFactory.CreateMakeCoffeeJob(_logger, _coffeeMachineClient, order, _taskQueue));
+            // _taskQueue.QueueBackgroundWorkItem(order, Factories.TaskFactory.CreateMakeCoffeeJob(_logger, _coffeeMachineClient, order, _taskQueue));
+            await _messengerClient.StartNewCup(new CoffeeMachine.Interfaces.DTOs.RequestCup()
+                    {
+                        Id = order.Id,
+                        Coffee = order.Coffee
+                    });
         }
 
         //See past orders

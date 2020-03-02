@@ -55,7 +55,7 @@ helm install hashicorp -f ./k8s/consul-config-development.yaml ./consul-helm
 ```
 
 
-### Install Coffeemachien
+### Install Coffeemachine
 
 So now it's time to install this application
 
@@ -65,3 +65,47 @@ helm install coffeemachine ./k8s/coffeemachine
 ```
 
 That's it
+
+
+## Service Bus (AMQP 1.0 Standard)
+
+The problem In order to handle the coffeemachine/barista scenario correctly in a way which can scale/replication while not creating multiple independent queues we must using a unified messaging approach.  Order may come in to any number of baristas and each barista may be able to pool together the coffeemachines.
+
+Great Links: 
+https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-amqp-overview
+http://azure.github.io/amqpnetlite/articles/hello_amqp.html
+
+## Using AMQP 1.0 in Development
+
+Install RabbitMQ (Option 1)
+
+Run the following command
+```
+helm install rabbit --set rabbitmq.username=admin,rabbitmq.password=secretpassword,volumePermissions.enabled=true,rabbitmq.plugins="rabbitmq_amqp1_0 rabbitmq_management rabbitmq_peer_discovery_k8s" stable/rabbitmq
+```
+echo "ErLang Cookie : $(kubectl get secret --namespace default rabbit-rabbitmq -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
+```
+if user creds don't work 'kubectl' into the running node with the following
+```
+kubectl exec -it rabbit-rabbitmq-0 /bin/bash
+rabbitmqctl add_user guest password .* .* .*
+rabbitmqctl set_user_tags guest administrator
+```
+
+or nats.io
+```
+helm install my-release --set auth.enabled=true,auth.user=guest,auth.password=T0pS3cr3t stable/nats
+```
+
+
+
+NOTE:  The installation will output all the needed information to configure string within the project in order to use the development AMQP service and management interface.  In order to feed the services events from outside the cluster you will need to use port forwarding to make the internal service accessible from the outside.
+
+Great Links:
+http://azure.github.io/amqpnetlite/
+https://github.com/helm/charts/tree/master/stable/rabbitmq
+
+
+## Tracing
+
+https://github.com/Microsoft/ApplicationInsights-dotnet-logging

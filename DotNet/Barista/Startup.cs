@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Barista.ExternalServices;
 
 namespace Barista
 {
@@ -30,7 +31,8 @@ namespace Barista
             services.AddHealthChecks();
             services.AddControllers();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
-            services.AddSingleton<CoffeeMachine.Interfaces.IClient, Barista.ExternalServices.CoffeeMachineClient>();            
+            services.AddSingleton<CoffeeMachine.Interfaces.IClient, Barista.ExternalServices.CoffeeMachineClient>();
+            services.AddSingleton<CoffeeMachine.Interfaces.IMessagingClient, MessagingClient>();           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,14 +1,19 @@
 # Default values for coffeemachine.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+namespace: development
 
 replicaCount:
   ui: 1
   barista: 2
   coffeemachine: 2
   krakend: 1
+  brokerj: 1
+
 
 datacenter: dc1
+
+serviceAccountName: coffeemachine-service-account
 
 images:
   pullPolicy: Always
@@ -30,6 +35,8 @@ serviceNames:
   barista: barista
   coffeemachine: coffeemachine
   krakend: krakend
+  elastic: elastic
+  rabbit: rabbit-rabbitmq
 
 services:
   coffeemachine:
@@ -44,6 +51,8 @@ services:
   krakend:
     type: NodePort
     port: 8080
+  rabbitmq:
+    port: 35003
 
 imagePullSecrets: []
 nameOverride: ""

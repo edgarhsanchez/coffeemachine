@@ -18,6 +18,6 @@ RUN dotnet publish "CoffeeMachine.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-HEALTHCHECK --interval=5s --timeout=3s CMD curl -f http://localhost:80/api/health/status || exit 1
+HEALTHCHECK --interval=5s --timeout=3s CMD curl -f http://localhost:80/health || exit 1
 ENTRYPOINT ["dotnet", "CoffeeMachine.dll"]
 
