@@ -1,2 +1,2 @@
-FROM nginx
-COPY ./client/dist /usr/share/nginx/html 
+FROM nginx:stable
+COPY ./client/dist/client/ /usr/share/nginx/html

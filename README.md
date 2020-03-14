@@ -55,7 +55,7 @@ helm install hashicorp -f ./k8s/consul-config-development.yaml ./consul-helm
 ```
 
 
-### Install Coffeemachien
+### Install Coffeemachine
 
 So now it's time to install this application
 
@@ -65,3 +65,29 @@ helm install coffeemachine ./k8s/coffeemachine
 ```
 
 That's it
+
+
+## Service Bus (AMQP 1.0 Standard)
+
+The problem In order to handle the coffeemachine/barista scenario correctly in a way which can scale/replication while not creating multiple independent queues we must using a unified messaging approach.  Order may come in to any number of baristas and each barista may be able to pool together the coffeemachines.
+
+Great Links: 
+https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-amqp-overview
+http://azure.github.io/amqpnetlite/articles/hello_amqp.html
+
+## Using AMQP 1.0 in Development
+
+The easiest way to test this is to create a cloud based AMQP1.0 service.  Azure Service Bus or other.
+
+The setup of a Queue on Azure Service Bus is farely easy and some additional information is below.
+
+https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-authentication-and-authorization
+
+
+Great Links:
+http://azure.github.io/amqpnetlite/
+
+
+## Tracing
+
+https://github.com/Microsoft/ApplicationInsights-dotnet-logging

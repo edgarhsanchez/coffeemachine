@@ -8,13 +8,22 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Barista.Services;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
 
 namespace Barista
 {
+    using System;
+    using System.Threading;
+    using Amqp.Framing;
+    using Amqp.Handler;
+    using Amqp.Sasl;
+    using Amqp.Types;
     public class Program
     {
         public static void Main(string[] args)
         {
+
             CreateHostBuilder(args).Build().Run();
         }
 

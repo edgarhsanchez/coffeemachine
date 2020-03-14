@@ -6,7 +6,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy-{{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.krakend }}
+  name: deploy-{{ include "coffeemachine.fullname" . }}{{ .Values.serviceNames.krakend }}  
   labels:
     {{- include "coffeemachine.labels" . | nindent 4 }}
 spec:
@@ -16,15 +16,19 @@ spec:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.krakend }}
       app: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
   template:
-    metadata:
+    metadata:      
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/service-port": "http"
         "consul.hashicorp.com/service-name": {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
+        "consul.hashicorp.com/connect-service-upstreams": "container-{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}:{{ .Values.services.coffeemachine.port }}:{{ .Values.datacenter }},container-{{ .Chart.Name }}{{ .Values.serviceNames.barista }}:{{ .Values.services.barista.port }}:{{ .Values.datacenter }},container-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}:{{ .Values.services.ui.port }}:{{ .Values.datacenter }}"
       labels:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.krakend }}
         app: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
     spec:
+      hostname: {{ .Values.serviceNames.krakend }}
+      subdomain: {{ .Chart.Name }}
+      serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -39,7 +43,7 @@ spec:
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
           - containerPort: 8080
-            name: "http"
+            name: kraken-port
             protocol: TCP
           command: [ "/usr/bin/krakend" ]
           args: [ "run", "-d", "-c", "/etc/krakend/krakend.json", "-p", "8080" ]
@@ -47,15 +51,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
+  name: service-{{ .Chart.Name }}{{ .Values.serviceNames.krakend }}  
   labels:
     app: {{ .Values.serviceNames.krakend }}
 spec:
   type: {{ .Values.services.krakend.type }}
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: http
+      port: 80
+      targetPort: kraken-port
       protocol: TCP
   selector:
     app: {{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-{{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.com/health-checks: "true"
+spec:
+  backend:
+    serviceName: service-{{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
+    servicePort: 80
+  rules:
+  - host: kraken.coffeemachine.devtests.com
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: service-{{ .Chart.Name }}{{ .Values.serviceNames.krakend }}
+          servicePort: 80
   

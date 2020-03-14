@@ -11,10 +11,10 @@ services:
     build:
       context: ./DotNet/.
       dockerfile: CoffeeMachine.Dockerfile
-  # ui:
-  #   image: edgarhsanchez/coffeemachine-ui:1.0.1
-  #   build:
-  #     context: ./UI/.
+  ui:
+    image: edgarhsanchez/coffeemachine-ui:1.0.0
+    build:
+      context: ./UI/.
   krakend:
     image: edgarhsanchez/coffeemachine-krakend:1.0.0
     build:

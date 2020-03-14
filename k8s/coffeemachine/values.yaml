@@ -1,14 +1,18 @@
 # Default values for coffeemachine.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+namespace: development
 
 replicaCount:
   ui: 1
-  barista: 2
-  coffeemachine: 2
+  barista: 1
+  coffeemachine: 1
   krakend: 1
 
+
 datacenter: dc1
+
+serviceAccountName: coffeemachine-service-account
 
 images:
   pullPolicy: Always

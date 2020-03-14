@@ -6,7 +6,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+  name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}  
   labels:
     {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.coffeemachine }}    
 spec:
@@ -16,7 +16,7 @@ spec:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.coffeemachine }}
       app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
   template:
-    metadata:
+    metadata:      
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/service-port": "http"
@@ -26,6 +26,9 @@ spec:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.coffeemachine }}
         app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
     spec:
+      hostname: {{ .Values.serviceNames.coffeemachine }}
+      subdomain: {{ .Chart.Name }}
+      serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -39,16 +42,16 @@ spec:
           image: "{{ .Values.images.coffeemachine.name }}:{{ .Values.images.coffeemachine.version }}"
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
-          - name: http
+          - name: coffmach-http
             containerPort: 80
             protocol: TCP
-          - name: https
+          - name: coffmach-https
             containerPort: 443
             protocol: TCP
           livenessProbe:
             httpGet:
               path: "/health"
-              port: http
+              port: coffmach-http
             initialDelaySeconds: 5
             periodSeconds: 5
           resources:
@@ -69,14 +72,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}  
   labels:
     app: {{ .Values.serviceNames.coffeemachine }}
 spec:
   type: {{ .Values.services.coffeemachine.type }}
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: coffmach-http
       protocol: TCP
   selector:
     app: {{ .Chart.Name }}{{ .Values.serviceNames.coffeemachine }}

@@ -27,6 +27,9 @@ spec:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.barista }}
         app: {{ .Chart.Name }}{{ .Values.serviceNames.barista }}
     spec:
+      hostname: {{ .Values.serviceNames.barista }}
+      subdomain: {{ .Chart.Name }}
+      serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.barista }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -40,16 +43,16 @@ spec:
           image: "{{ .Values.images.barista.name }}:{{ .Values.images.barista.version }}"
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
-          - name: http
+          - name: barista-http
             containerPort: 80
             protocol: TCP
-          - name: https
+          - name: barista-https
             containerPort: 443
             protocol: TCP
           livenessProbe:
             httpGet:
               path: "/health"
-              port: http
+              port: barista-http
             initialDelaySeconds: 5
             periodSeconds: 5
           resources:
@@ -77,7 +80,7 @@ spec:
   type: {{ .Values.services.barista.type }}
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: barista-http
       protocol: TCP
   selector:
     app: {{ .Chart.Name }}{{ .Values.serviceNames.barista }}

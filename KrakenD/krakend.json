@@ -1,57 +1,92 @@
 {
-    "version": 2,
-    "extra_config": {
-      "github_com/devopsfaith/krakend-cors": {
-        "allow_origins": [
-          "*"
-        ],
-        "expose_headers": [
-          "Content-Length"
-        ],
-        "max_age": "12h",
-        "allow_methods": [
-          "GET",
-          "HEAD",
-          "POST",
-          "PUT",
-          "DELETE",
-          "CONNECT",
-          "OPTIONS",
-          "TRACE",
-          "PATCH"
-        ]
-      }
-    },
-    "timeout": "60000ms",
-    "cache_ttl": "300s",
-    "output_encoding": "json",
-    "name": "KrakenD API Gateway",
-    "port": 8080,
-    "endpoints": [
-          {
-            "endpoint": "/api/order",
-            "method": "GET",
-            "backend": [{
-              "url_pattern": "/api/order",
-              "sd": "dns",
-              "host": [
-                "api-catalog.service.consul.srv"
-              ],
-              "disable_host_sanitize": true
-            }]
-        },
+  "version": 2,
+  "extra_config": {
+    "github_com/devopsfaith/krakend-cors": {
+      "allow_origins": [
+        "*"
+      ],
+      "expose_headers": [
+        "Content-Length"
+      ],
+      "max_age": "12h",
+      "allow_methods": [
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "DELETE",
+        "CONNECT",
+        "OPTIONS",
+        "TRACE",
+        "PATCH"
+      ]
+    }
+  },
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "name": "KrakenD API Gateway",
+  "port": 8080,
+  "endpoints": [
+    {
+      "endpoint": "/",
+      "method": "GET",
+      "extra_config": {},
+      "output_encoding": "no-op",
+      "concurrent_calls": 1,
+      "backend": [
         {
-            "endpoint": "/api/order/{id}",
-            "method": "GET",
-            "backend": [{
-              "url_pattern": "/api/order/{id}",
-              "sd": "dns",
-              "host": [
-                "api-catalog.service.consul.srv"
-              ],
-              "disable_host_sanitize": true
-            }]
+          "url_pattern": "/index.html",
+          "encoding": "no-op",
+          "sd": "static",
+          "extra_config": {},
+          "method": "GET",
+          "host": [
+            "http://localhost:35001"
+          ],
+          "disable_host_sanitize": false
         }
-    ]
-  }
-  
+      ]
+    },
+    {
+      "endpoint": "/api/order",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/order",
+          "sd": "static",
+          "encoding": "json",
+          "host": [
+            "http://localhost:35002"
+          ],
+          "extra_config": {},
+          "method": "GET",
+          "is_collection": true,
+          "target": ""
+        }
+      ],
+      "extra_config": {},
+      "output_encoding": "json",
+      "concurrent_calls": 1
+    },
+    {
+      "endpoint": "/api/order/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/order/{id}",
+          "sd": "static",
+          "encoding": "json",
+          "host": [
+            "http://localhost:35002"
+          ],
+          "extra_config": {},
+          "method": "GET"
+        }
+      ],
+      "extra_config": {},
+      "output_encoding": "json",
+      "concurrent_calls": 1
+    }
+  ]
+}

@@ -2,12 +2,11 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+  name: deploy-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}  
   labels:
     {{- include "coffeemachine.labels" . | nindent 4 }}{{ .Values.serviceNames.ui }}
 spec:
@@ -17,7 +16,7 @@ spec:
       {{- include "coffeemachine.selectorLabels" . | nindent 6 }}{{ .Values.serviceNames.ui }}
       app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
   template:
-    metadata:
+    metadata:      
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/service-port": "http"
@@ -28,8 +27,9 @@ spec:
         {{- include "coffeemachine.selectorLabels" . | nindent 8 }}{{ .Values.serviceNames.ui }}
         app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
     spec:
-      volumes: 
-      - name: shared-data
+      hostname: {{ .Values.serviceNames.ui }}
+      subdomain: {{ .Chart.Name }}
+      serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -41,23 +41,11 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.images.ui.name }}:{{ .Values.images.ui.version }}"
-        volumeMounts:
-        - name: shared-data
-          mountPath: /usr/share/nginx/html
         imagePullPolicy: {{ .Values.images.pullPolicy }}
         ports:
-        - name: https
-          containerPort: 443
-          protocol: TCP
-        - name: http
+        - name: ui-http
           containerPort: 80
           protocol: TCP
-        readinessProbe:
-          tcpSocket:
-            port: http
-        livenessProbe:
-          tcpSocket:
-            port: http
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
       serviceAccountName: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
@@ -77,14 +65,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+  name: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}  
   labels:
     app: {{ .Values.serviceNames.ui }}
 spec:
   type: {{ .Values.services.ui.type }}
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: ui-http
       protocol: TCP
   selector:
     app: {{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.com/health-checks: "true"
+spec:
+  backend:
+    serviceName: service-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+    servicePort: 80
+  rules:
+  - host: ui.coffeemachine.devtests.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: service-{{ .Chart.Name }}{{ .Values.serviceNames.ui }}
+          servicePort: 80
