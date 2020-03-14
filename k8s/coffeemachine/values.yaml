@@ -5,10 +5,9 @@ namespace: development
 
 replicaCount:
   ui: 1
-  barista: 2
-  coffeemachine: 2
+  barista: 1
+  coffeemachine: 1
   krakend: 1
-  brokerj: 1
 
 
 datacenter: dc1
@@ -35,8 +34,6 @@ serviceNames:
   barista: barista
   coffeemachine: coffeemachine
   krakend: krakend
-  elastic: elastic
-  rabbit: rabbit-rabbitmq
 
 services:
   coffeemachine:
@@ -51,8 +48,6 @@ services:
   krakend:
     type: NodePort
     port: 8080
-  rabbitmq:
-    port: 35003
 
 imagePullSecrets: []
 nameOverride: ""

@@ -19,7 +19,3 @@ services:
     image: edgarhsanchez/coffeemachine-krakend:1.0.0
     build:
       context: ./KrakenD/.
-  brokerj:
-    image: edgarhsanchez/coffeemachine-brokerj:1.0.0
-    build:
-      context: ./BrokerJ/.

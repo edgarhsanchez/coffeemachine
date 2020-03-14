@@ -1,5 +1,6 @@
 helm uninstall coffeemachine
 cd ./UI/client
+npm install
 npm run build
 cd ../../
 docker-compose build
