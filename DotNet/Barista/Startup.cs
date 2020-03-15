@@ -31,8 +31,8 @@ namespace Barista
             services.AddHealthChecks();
             services.AddControllers();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
-            services.AddSingleton<CoffeeMachine.Interfaces.IClient, Barista.ExternalServices.CoffeeMachineClient>();
-            services.AddSingleton<CoffeeMachine.Interfaces.IMessagingClient, MessagingClient>();           
+            services.AddSingleton<Maker.Interfaces.IClient, Barista.ExternalServices.CoffeeMachineClient>();
+            services.AddSingleton<Maker.Interfaces.IMessagingClient, MessagingClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +57,7 @@ namespace Barista
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {                   
+            {
                 endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });

@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Barista.Interfaces\Barista.Interfaces.csproj" />
-    <ProjectReference Include="..\CoffeeMachine.Interfaces\CoffeeMachine.Interfaces.csproj" />
+    <ProjectReference Include="..\Maker.Interfaces\Maker.Interfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>

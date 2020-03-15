@@ -12,7 +12,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CoffeeMachine
+namespace Maker
 {
     public class Startup
     {
@@ -53,7 +53,7 @@ namespace CoffeeMachine
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {                   
+            {
                 endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });

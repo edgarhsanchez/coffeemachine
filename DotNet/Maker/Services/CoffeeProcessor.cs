@@ -6,24 +6,24 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Http;
-using CoffeeMachine.Interfaces;
+using Maker.Interfaces;
 using Amqp;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using CoffeeMachine.Interfaces.DTOs;
+using Maker.Interfaces.DTOs;
 using System.Text;
 using System.Net;
 using Consul;
 
-namespace CoffeeMachine.Services
+namespace Maker.Services
 {
 
     public class CoffeeProcessor : BackgroundService
     {
-         private readonly ILogger<CoffeeProcessor> _logger;
-         private readonly IConfiguration _config;
-         private readonly Guid nodeId;
-        public CoffeeProcessor( 
+        private readonly ILogger<CoffeeProcessor> _logger;
+        private readonly IConfiguration _config;
+        private readonly Guid nodeId;
+        public CoffeeProcessor(
             IConfiguration config,
             ILogger<CoffeeProcessor> logger)
         {
@@ -46,7 +46,7 @@ namespace CoffeeMachine.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                
+
                 try
                 {
                     Connection connection = await Connection.Factory.CreateAsync(await GetAmqpAddressAsync());
@@ -55,22 +55,24 @@ namespace CoffeeMachine.Services
 
                     //receive message
                     Message message = await receiver.ReceiveAsync();
-                    if(message == null){
+                    if (message == null)
+                    {
                         continue;
                     }
 
-                   
+
                     //handle message
                     _logger.LogInformation(message.ToString());
                     _logger.LogInformation(message.Body.ToString());
                     var requestCup = JsonConvert.DeserializeObject<RequestCup>(message.Body.ToString());
-                    CoffeeMachine.Controllers.MakerController.WorkingOrders.Add(new Order(){
+                    Maker.Controllers.MakerController.WorkingOrders.Add(new Order()
+                    {
                         Id = requestCup.Id,
                         Coffee = requestCup.Coffee,
                         Started = DateTime.UtcNow
                     });
 
-                     receiver.Accept(message);
+                    receiver.Accept(message);
 
 
                     await receiver.CloseAsync();
@@ -79,7 +81,7 @@ namespace CoffeeMachine.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, 
+                    _logger.LogError(ex,
                        ex.Message);
                 }
             }
@@ -92,11 +94,15 @@ namespace CoffeeMachine.Services
             await base.StopAsync(stoppingToken);
         }
 
-        private async Task<Address> GetAmqpAddressAsync() {            
-            using (var consulClient = new ConsulClient(config=>{
+        private async Task<Address> GetAmqpAddressAsync()
+        {
+            using (var consulClient = new ConsulClient(config =>
+            {
                 config.Address = new Uri(_config.GetValue<string>("ConsulURI"));
-            })) {
-                try{
+            }))
+            {
+                try
+                {
                     var baristaKeyNameKV = await consulClient.KV.Get("AMQPMakerKeyName");
                     var baristaKeyName = WebUtility.UrlEncode(Encoding.UTF8.GetString(baristaKeyNameKV.Response.Value));
                     var baristaKeyKV = await consulClient.KV.Get("AMQPMakerKey");
@@ -105,11 +111,13 @@ namespace CoffeeMachine.Services
                     var startNewCupHost = Encoding.UTF8.GetString(startNewCupHostKV.Response.Value);
                     _logger.LogInformation($"amqps://{baristaKeyName}:{baristaKey}@{startNewCupHost}/");
                     return new Address($"amqps://{baristaKeyName}:{baristaKey}@{startNewCupHost}/");
-                } catch(Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     _logger.LogError(ex, ex.Message);
                 }
             }
-           
+
             return null;
         }
     }

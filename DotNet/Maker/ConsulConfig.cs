@@ -1,4 +1,4 @@
-namespace CoffeeMachine
+namespace Maker
 {
     public class ConsulConfig
     {

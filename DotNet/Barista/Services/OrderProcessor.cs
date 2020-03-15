@@ -6,16 +6,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Http;
-using CoffeeMachine.Interfaces;
+using Maker.Interfaces;
 
 namespace Barista.Services
 {
 
     public class OrderProcessorService : BackgroundService
     {
-         private readonly ILogger<OrderProcessorService> _logger;
+        private readonly ILogger<OrderProcessorService> _logger;
 
-        public OrderProcessorService(IBackgroundTaskQueue taskQueue, 
+        public OrderProcessorService(IBackgroundTaskQueue taskQueue,
             ILogger<OrderProcessorService> logger)
         {
             TaskQueue = taskQueue;
@@ -38,7 +38,7 @@ namespace Barista.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var workItem = 
+                var workItem =
                     await TaskQueue.DequeueAsync(stoppingToken);
 
                 try
@@ -47,7 +47,7 @@ namespace Barista.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, 
+                    _logger.LogError(ex,
                         "Error occurred executing {WorkItem}.", nameof(workItem));
                 }
             }

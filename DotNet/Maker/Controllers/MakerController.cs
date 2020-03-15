@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CoffeeMachine.Interfaces.DTOs;
+using Maker.Interfaces.DTOs;
 using System.Collections.Concurrent;
 
-namespace CoffeeMachine.Controllers
+namespace Maker.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -17,8 +17,10 @@ namespace CoffeeMachine.Controllers
         private object LockObject = new object();
 
         private static ConcurrentBag<Order> _workingOrders = new ConcurrentBag<Order>();
-        public static ConcurrentBag<Order> WorkingOrders {
-            get{
+        public static ConcurrentBag<Order> WorkingOrders
+        {
+            get
+            {
                 return _workingOrders;
             }
         }
@@ -35,14 +37,14 @@ namespace CoffeeMachine.Controllers
             _logger.LogInformation("Busy called");
             var currentOrder = _workingOrders.FirstOrDefault(order => order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) > 0);
             return currentOrder != null;
-            
+
         }
 
         [HttpPost("StartNewCup")]
         public bool StartNewCup([FromBody] RequestCup requestCup)
         {
             _logger.LogInformation("StartNewCup called");
-            
+
             if (IsBusy())
             {
                 return false;
@@ -60,14 +62,15 @@ namespace CoffeeMachine.Controllers
 
                 return IsBusy();
             }
-            
+
         }
 
         //See past orders
         [HttpGet("PastOrders")]
-        public IEnumerable<Order> GetPastOrders() {
+        public IEnumerable<Order> GetPastOrders()
+        {
             _logger.LogInformation("passed orders retrieved");
-            return _workingOrders.Where(order =>order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) < 0 );
+            return _workingOrders.Where(order => order.Started.AddMinutes(1).CompareTo(DateTime.UtcNow) < 0);
         }
 
     }

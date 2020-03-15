@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Barista.Services;
 using Barista.Interfaces;
 using Barista.Interfaces.DTOs;
-using CoffeeMachine.Interfaces;
+using Maker.Interfaces;
 
 namespace Barista.Controllers
 {
@@ -19,9 +19,9 @@ namespace Barista.Controllers
     {
         private readonly ILogger _logger;
         private readonly IBackgroundTaskQueue _taskQueue;
-        private readonly CoffeeMachine.Interfaces.IClient _coffeeMachineClient;
-        private readonly CoffeeMachine.Interfaces.IMessagingClient _messengerClient;
-        public OrderController(ILogger<OrderController> logger, IBackgroundTaskQueue taskQueue, CoffeeMachine.Interfaces.IClient coffeeMachineClient, CoffeeMachine.Interfaces.IMessagingClient messengerClient)
+        private readonly Maker.Interfaces.IClient _coffeeMachineClient;
+        private readonly Maker.Interfaces.IMessagingClient _messengerClient;
+        public OrderController(ILogger<OrderController> logger, IBackgroundTaskQueue taskQueue, Maker.Interfaces.IClient coffeeMachineClient, Maker.Interfaces.IMessagingClient messengerClient)
         {
             _logger = logger;
             _taskQueue = taskQueue;
@@ -43,7 +43,7 @@ namespace Barista.Controllers
         public ActionResult<Order> Get(int id)
         {
             _logger.LogInformation("single order retrieved");
-            return new ActionResult<Order>(_taskQueue.QueuedOrders().FirstOrDefault(o=>o.Id == id));
+            return new ActionResult<Order>(_taskQueue.QueuedOrders().FirstOrDefault(o => o.Id == id));
         }
 
         // POST api/values
@@ -52,16 +52,17 @@ namespace Barista.Controllers
         {
             _logger.LogInformation("order added");
             // _taskQueue.QueueBackgroundWorkItem(order, Factories.TaskFactory.CreateMakeCoffeeJob(_logger, _coffeeMachineClient, order, _taskQueue));
-            await _messengerClient.StartNewCup(new CoffeeMachine.Interfaces.DTOs.RequestCup()
-                    {
-                        Id = order.Id,
-                        Coffee = order.Coffee
-                    });
+            await _messengerClient.StartNewCup(new Maker.Interfaces.DTOs.RequestCup()
+            {
+                Id = order.Id,
+                Coffee = order.Coffee
+            });
         }
 
         //See past orders
         [HttpGet("PastOrders")]
-        public async Task<IEnumerable<CoffeeMachine.Interfaces.DTOs.Order>> GetPastOrders() {
+        public async Task<IEnumerable<Maker.Interfaces.DTOs.Order>> GetPastOrders()
+        {
             _logger.LogInformation("passed orders retrieved");
             return await _coffeeMachineClient.GetPastOrders();
         }

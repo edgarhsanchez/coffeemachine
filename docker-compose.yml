@@ -5,12 +5,12 @@ services:
     image: edgarhsanchez/coffeemachine-barista:1.0.0
     build:
       context: ./DotNet/.
-      dockerfile: Barista.Dockerfile
+      dockerfile: ./Barista/Dockerfile
   coffeemachine:
     image: edgarhsanchez/coffeemachine-coffeemachine:1.0.0
     build:
       context: ./DotNet/.
-      dockerfile: CoffeeMachine.Dockerfile
+      dockerfile: ./Maker/Dockerfile
   ui:
     image: edgarhsanchez/coffeemachine-ui:1.0.0
     build:

@@ -7,12 +7,12 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
 COPY . .
+WORKDIR /src/Barista
 RUN dotnet restore "Barista.csproj"
-WORKDIR /src
 RUN dotnet build "Barista.csproj" -c Release -o /app/build
 
 FROM build AS publish
-WORKDIR /src
+WORKDIR /src/Barista
 RUN dotnet publish "Barista.csproj" -c Release -o /app/publish
 
 FROM base AS final

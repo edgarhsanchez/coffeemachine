@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using CoffeeMachine.Interfaces;
-using CoffeeMachine.Interfaces.DTOs;
+using Maker.Interfaces;
+using Maker.Interfaces.DTOs;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Barista.ExternalServices
 {
-    public class CoffeeMachineClient : CoffeeMachine.Interfaces.IClient
+    public class CoffeeMachineClient : Maker.Interfaces.IClient
     {
         private readonly ILogger<CoffeeMachineClient> _logger;
 
@@ -29,7 +29,7 @@ namespace Barista.ExternalServices
             {
                 var requestPath = $"{GetHost()}api/maker/IsBusy";
                 _logger.LogInformation($"Making request to CoffeeMachine IsBusy at {requestPath}");
-                
+
                 using (var httpClient = new HttpClient())
                 {
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -57,7 +57,7 @@ namespace Barista.ExternalServices
                 _logger.LogInformation($"Making request to CoffeeMachine StartNewCup at {requestPath}");
                 using (var httpClient = new HttpClient())
                 {
-                    
+
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var json = JsonConvert.SerializeObject(requestCup);
@@ -79,15 +79,16 @@ namespace Barista.ExternalServices
             return false;
         }
 
-        public async Task<IEnumerable<Order>> GetPastOrders() {
+        public async Task<IEnumerable<Order>> GetPastOrders()
+        {
             try
             {
                 var requestPath = $"{GetHost()}api/maker/PastOrders";
                 _logger.LogInformation($"Making request to CoffeeMachine StartNewCup at {requestPath}");
                 using (var httpClient = new HttpClient())
                 {
-                    
-                
+
+
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     var response = await httpClient.GetAsync(requestPath);
                     response.EnsureSuccessStatusCode();
@@ -95,7 +96,7 @@ namespace Barista.ExternalServices
                     var orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(content);
                     _logger.LogInformation($"GetPastOrders retrieved");
                     return orders;
-                
+
                 }
             }
             catch (Exception ex)

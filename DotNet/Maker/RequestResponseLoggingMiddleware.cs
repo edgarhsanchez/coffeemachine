@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 
-namespace CoffeeMachine
+namespace Maker
 {
     /// <summary>
     /// Middleware to trigger an empty log entry to be picked up by NLog

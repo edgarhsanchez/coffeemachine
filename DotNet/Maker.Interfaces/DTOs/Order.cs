@@ -1,7 +1,7 @@
 
 using System;
 
-namespace CoffeeMachine.Interfaces.DTOs
+namespace Maker.Interfaces.DTOs
 {
     public class Order
     {

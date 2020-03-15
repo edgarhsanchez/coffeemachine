@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoffeeMachine.Interfaces\CoffeeMachine.Interfaces.csproj" />
+    <ProjectReference Include="..\Maker.Interfaces\Maker.Interfaces.csproj" />
   </ItemGroup>
 
 <ItemGroup>

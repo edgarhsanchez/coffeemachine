@@ -7,9 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using CoffeeMachine.Services;
+using Maker.Services;
 
-namespace CoffeeMachine
+namespace Maker
 {
     public class Program
     {
