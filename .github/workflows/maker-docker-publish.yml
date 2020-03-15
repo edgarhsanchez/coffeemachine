@@ -11,8 +11,8 @@ on:
       - v*
 
     paths:
-      - "${{ github.workspace }}/DotNet/Maker/**"
-      - "${{ github.workspace }}/.github/workflows/maker-docker-publish.yml"
+      - "DotNet/Maker/**"
+      - ".github/workflows/maker-docker-publish.yml"
 
   # Run tests for any PRs.
   pull_request:

@@ -11,8 +11,8 @@ on:
       - v*
 
     paths:
-      - "${{ github.workspace }}/DotNet/Barista/**"
-      - "${{ github.workspace }}/.github/workflows/barista-docker-publish.yml"
+      - "DotNet/Barista/**"
+      - ".github/workflows/barista-docker-publish.yml"
 
   # Run tests for any PRs.
   pull_request:
