@@ -1,0 +1,27 @@
+{
+  "name": "coffeemachine",
+  "version": "1.0.0",
+  "description": "A mono repo dedicated to showing the power of kubernetes in a simple micro service application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgarhsanchez/coffeemachine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edgarhsanchez/coffeemachine/issues"
+  },
+  "homepage": "https://github.com/edgarhsanchez/coffeemachine#readme",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
