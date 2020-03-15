@@ -8,10 +8,11 @@ on:
 
     # Publish `v1.2.3` tags as releases.
     tags:
-      - v1.0.0
+      - v*
 
     paths:
       - "${{ github.workspace }}/UI/**"
+      - "${{ github.workspace }}/.github/workflows/ui-docker-publish.yml"
 
   # Run tests for any PRs.
   pull_request:
