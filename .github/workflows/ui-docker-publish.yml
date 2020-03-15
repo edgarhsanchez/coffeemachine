@@ -10,6 +10,9 @@ on:
     tags:
       - v1.0.0
 
+    paths:
+      - "${{ github.workspace }}/UI/**"
+
   # Run tests for any PRs.
   pull_request:
 
