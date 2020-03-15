@@ -1,3 +1,2 @@
 ./client/node_modules
-./client/e2e
-./client/src
+./client/dist
