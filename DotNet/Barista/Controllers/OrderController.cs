@@ -63,7 +63,7 @@ namespace Barista.Controllers
         [HttpGet("PastOrders")]
         public async Task<IEnumerable<Maker.Interfaces.DTOs.Order>> GetPastOrders()
         {
-            _logger.LogInformation("passed orders retrieved");
+            _logger.LogInformation("passed orders retrieved.");
             return await _coffeeMachineClient.GetPastOrders();
         }
     }
