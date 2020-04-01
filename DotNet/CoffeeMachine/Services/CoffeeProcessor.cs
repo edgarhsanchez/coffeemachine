@@ -22,14 +22,12 @@ namespace CoffeeMachine.Services
     {
          private readonly ILogger<CoffeeProcessor> _logger;
          private readonly IConfiguration _config;
-         private readonly Guid nodeId;
         public CoffeeProcessor( 
             IConfiguration config,
             ILogger<CoffeeProcessor> logger)
         {
             _logger = logger;
             _config = config;
-            nodeId = Guid.NewGuid();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
